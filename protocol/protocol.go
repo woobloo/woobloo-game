@@ -4,4 +4,5 @@ type Code byte
 
 const (
 	GetEverything Code = iota
+	GetTile
 )

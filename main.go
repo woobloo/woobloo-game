@@ -97,9 +97,9 @@ func handle(ws *websocket.Conn, UUID uuid.UUID, msg []byte) error {
 	code := protocol.Code(msg[0])
 	switch code {
 	case protocol.GetEverything:
-		sendEverything(ws)
-	default:
-		_, err = ws.Write(msg) // echo it back
+		err = sendEverything(ws)
+	case protocol.GetTile:
+		err = sendTile(ws, msg)
 	}
 	return err
 }
@@ -121,8 +121,21 @@ func sendEverything(ws *websocket.Conn) error {
 	if err = gzws.Flush(); err != nil {
 		return err
 	}
-	if err = gzws.Close(); err != nil {
-		return err
+	err = gzws.Close()
+	return err
+}
+
+func sendTile(ws *websocket.Conn, msg []byte) error {
+	pos := struct{X uint; Y uint}{}
+	err := json.Unmarshal(msg[1:], pos)
+	if err != nil {
+		fmt.Println("Bad GetTile message.")
+		return nil
 	}
+	bytes, err := json.Marshal(tiles[pos.Y][pos.X])
+	if err != nil {
+		panic(err)
+	}
+	_, err = ws.Write(bytes)
 	return err
 }

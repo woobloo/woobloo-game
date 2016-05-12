@@ -30,7 +30,6 @@ func NewDefaultMap(width uint, height uint) [][]*Tile {
 }
 
 type TerrainType byte
-
 const (
 	Plains TerrainType = iota
 	Hilly
@@ -39,7 +38,6 @@ const (
 )
 
 type FoliageType byte
-
 const (
 	Desert FoliageType = iota
 	Grassy
@@ -48,7 +46,6 @@ const (
 )
 
 type MineralType byte
-
 const (
 	None MineralType = iota
 	Generic
