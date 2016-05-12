@@ -7,6 +7,9 @@ const (
 
 type Tile struct {
 	X, Y uint
+	Terrain TerrainType
+	Foliage FoliageType
+	Mineral MineralType
 }
 
 func NewDefaultMap(width uint, height uint) [][]*Tile {
@@ -20,3 +23,29 @@ func NewDefaultMap(width uint, height uint) [][]*Tile {
 	}
 	return tiles
 }
+
+type TerrainType byte
+const (
+	Plains TerrainType = iota
+	Hilly
+	Mountainous
+	Coastal
+)
+
+type FoliageType byte
+const (
+	Desert FoliageType = iota
+	Grassy
+	Forest
+	Jungle
+)
+
+type MineralType byte
+const (
+	None MineralType = iota
+	Generic
+	Iron
+	Silver
+	Gold
+	Gemstones
+)

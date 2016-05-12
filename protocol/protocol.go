@@ -3,5 +3,5 @@ package protocol
 type Code byte
 
 const (
-	GetEverything = iota
+	GetEverything Code = iota
 )
