@@ -1,6 +1,7 @@
 package main
 
 import (
+	"compress/gzip"
 	"encoding/json"
 	"errors"
 	"flag"
@@ -12,6 +13,8 @@ import (
 	"golang.org/x/net/websocket"
 	"net/http"
 )
+
+const TransferSize = 4096
 
 var ip, port string
 var mapWidth, mapHeight uint
@@ -47,7 +50,7 @@ func main() {
 }
 
 func accepter(ws *websocket.Conn) {
-	buf := make([]byte, 512)
+	buf := make([]byte, TransferSize)
 	_, err := ws.Read(buf)
 	if err != nil {
 		fmt.Printf("Error reading from websocket at first connection!")
@@ -70,7 +73,7 @@ func accepter(ws *websocket.Conn) {
 }
 
 func talk(ws *websocket.Conn, UUID uuid.UUID) {
-	buf := make([]byte, 512)
+	buf := make([]byte, TransferSize)
 	for {
 		nbytes, err := ws.Read(buf)
 		if err != nil {
@@ -111,6 +114,15 @@ func sendEverything(ws *websocket.Conn) error {
 		fmt.Printf("Error marshalling everything!")
 		panic(err)
 	}
-	_, err = ws.Write(bytes)
+	gzws := gzip.NewWriter(ws)
+	if _, err = gzws.Write(bytes); err != nil {
+		return err
+	}
+	if err = gzws.Flush(); err != nil {
+		return err
+	}
+	if err = gzws.Close(); err != nil {
+		return err
+	}
 	return err
 }
