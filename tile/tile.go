@@ -6,7 +6,7 @@ const (
 )
 
 type Tile struct {
-	X, Y uint
+	X, Y    uint
 	Terrain TerrainType
 	Foliage FoliageType
 	Mineral MineralType
@@ -17,7 +17,12 @@ func NewDefaultMap(width uint, height uint) [][]*Tile {
 	for h := uint(0); h < height; h++ {
 		row := make([]*Tile, width)
 		for w := uint(0); w < width; w++ {
-			row[w] = &Tile{X: w * TileWidth, Y: h * TileHeight}
+			row[w] = &Tile{
+				X:       w * TileWidth,
+				Y:       h * TileHeight,
+				Terrain: Plains,
+				Foliage: Grassy,
+				Mineral: None}
 		}
 		tiles = append(tiles, row)
 	}
@@ -25,6 +30,7 @@ func NewDefaultMap(width uint, height uint) [][]*Tile {
 }
 
 type TerrainType byte
+
 const (
 	Plains TerrainType = iota
 	Hilly
@@ -33,6 +39,7 @@ const (
 )
 
 type FoliageType byte
+
 const (
 	Desert FoliageType = iota
 	Grassy
@@ -41,6 +48,7 @@ const (
 )
 
 type MineralType byte
+
 const (
 	None MineralType = iota
 	Generic
