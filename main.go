@@ -53,12 +53,13 @@ func accepter(ws *websocket.Conn) {
 	buf := make([]byte, TransferSize)
 	_, err := ws.Read(buf)
 	if err != nil {
-		fmt.Printf("Error reading from websocket at first connection!")
+		fmt.Println("Error reading from websocket at first connection!")
+		fmt.Println(err)
 		return
 	}
 	UUID, err := uuid.FromString(ws.Request().URL.Path[1:37])
 	if err != nil {
-		fmt.Printf("Invalid UUID!")
+		fmt.Println("Invalid UUID!")
 		return
 	}
 	p := player.NewDefaultPlayer()
@@ -66,7 +67,7 @@ func accepter(ws *websocket.Conn) {
 	players = append(players, p)
 	sendEverything(ws)
 	if err != nil {
-		fmt.Printf("Could not send everything at first connection!")
+		fmt.Println("Could not send everything at first connection!")
 		return
 	}
 	go talk(ws, UUID)
@@ -77,16 +78,16 @@ func talk(ws *websocket.Conn, UUID uuid.UUID) {
 	for {
 		nbytes, err := ws.Read(buf)
 		if err != nil {
-			fmt.Printf("Error reading from websocket. Disconnecting.")
+			fmt.Println("Error reading from websocket. Disconnecting.")
 			return // stop talking to this websocket
 		}
 		if nbytes == 0 {
-			fmt.Printf("Bad message from websocket. Continuing.")
+			fmt.Println("Bad message from websocket. Continuing.")
 			continue // bad message
 		}
 		err = handle(ws, UUID, buf[:nbytes])
 		if err != nil {
-			fmt.Printf("Error writing to websocket. Disconnecting.")
+			fmt.Println("Error writing to websocket. Disconnecting.")
 			return // stop talking to this websocket
 		}
 	}
@@ -106,12 +107,13 @@ func handle(ws *websocket.Conn, UUID uuid.UUID, msg []byte) error {
 
 func sendEverything(ws *websocket.Conn) error {
 	data := struct {
+		NumBytes
 		Players []*player.Player
 		Map     [][]*tile.Tile
 	}{Players: players, Map: tiles}
 	bytes, err := json.Marshal(&data)
 	if err != nil {
-		fmt.Printf("Error marshalling everything!")
+		fmt.Println("Error marshalling everything!")
 		panic(err)
 	}
 	gzws := gzip.NewWriter(ws)

@@ -1,6 +1,6 @@
 package protocol
 
-type Code byte
+type Code uint32
 
 const (
 	GetEverything Code = iota
