@@ -107,7 +107,6 @@ func handle(ws *websocket.Conn, UUID uuid.UUID, msg []byte) error {
 
 func sendEverything(ws *websocket.Conn) error {
 	data := struct {
-		NumBytes
 		Players []*player.Player
 		Map     [][]*tile.Tile
 	}{Players: players, Map: tiles}
