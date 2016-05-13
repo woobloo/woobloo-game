@@ -117,17 +117,17 @@ func sendEverything(ws *websocket.Conn) error {
 		fmt.Println("Error marshalling everything!")
 		panic(err)
 	}
-	buf := new(bytes.Buffer)
-	gzws := gzip.NewWriter(bufio.NewWriter(buf))
-	if _, err = gzws.Write(marshalledBytes); err != nil {
-		return err
-	}
-	if err = gzws.Flush(); err != nil {
-		return err
-	}
-	err = gzws.Close()
-	websocket.Message.Send(ws, buf.String())
-	return err
+//	buf := new(bytes.Buffer)
+//	gzws := gzip.NewWriter(bufio.NewWriter(buf))
+//	if _, err = gzws.Write(marshalledBytes); err != nil {
+//		return err
+//	}
+//	if err = gzws.Flush(); err != nil {
+//		return err
+//	}
+//	err = gzws.Close()
+//	return websocket.Message.Send(ws, buf.String())
+	return websocket.Message.Send(ws, string(marshalledBytes))
 }
 
 func sendTile(ws *websocket.Conn, msg []byte) error {
@@ -141,6 +141,5 @@ func sendTile(ws *websocket.Conn, msg []byte) error {
 	if err != nil {
 		panic(err)
 	}
-	_, err = ws.Write(marshalledBytes)
-	return err
+	return websocket.Message.Send(ws, string(marshalledBytes))
 }
