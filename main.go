@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bufio"
+	"bytes"
 	"compress/gzip"
 	"encoding/json"
 	"errors"
@@ -110,19 +112,21 @@ func sendEverything(ws *websocket.Conn) error {
 		Players []*player.Player
 		Map     [][]*tile.Tile
 	}{Players: players, Map: tiles}
-	bytes, err := json.Marshal(&data)
+	marshalledBytes, err := json.Marshal(&data)
 	if err != nil {
 		fmt.Println("Error marshalling everything!")
 		panic(err)
 	}
-	gzws := gzip.NewWriter(ws)
-	if _, err = gzws.Write(bytes); err != nil {
+	buf := new(bytes.Buffer)
+	gzws := gzip.NewWriter(bufio.NewWriter(buf))
+	if _, err = gzws.Write(marshalledBytes); err != nil {
 		return err
 	}
 	if err = gzws.Flush(); err != nil {
 		return err
 	}
 	err = gzws.Close()
+	websocket.Message.Send(ws, buf.String())
 	return err
 }
 
@@ -133,10 +137,10 @@ func sendTile(ws *websocket.Conn, msg []byte) error {
 		fmt.Println("Bad GetTile message.")
 		return nil
 	}
-	bytes, err := json.Marshal(tiles[pos.Y][pos.X])
+	marshalledBytes, err := json.Marshal(tiles[pos.Y][pos.X])
 	if err != nil {
 		panic(err)
 	}
-	_, err = ws.Write(bytes)
+	_, err = ws.Write(marshalledBytes)
 	return err
 }
