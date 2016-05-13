@@ -1,9 +1,9 @@
 package main
 
 import (
-	"bufio"
-	"bytes"
-	"compress/gzip"
+//	"bufio"
+//	"bytes"
+//	"compress/gzip"
 	"encoding/json"
 	"errors"
 	"flag"
