@@ -52,8 +52,8 @@ func main() {
 }
 
 func accepter(ws *websocket.Conn) {
-	buf := make([]byte, TransferSize)
-	_, err := ws.Read(buf)
+	var msg string
+	err := websocket.Message.Receive(ws, &msg)
 	if err != nil {
 		fmt.Println("Error reading from websocket at first connection!")
 		fmt.Println(err)
@@ -76,18 +76,14 @@ func accepter(ws *websocket.Conn) {
 }
 
 func talk(ws *websocket.Conn, UUID uuid.UUID) {
-	buf := make([]byte, TransferSize)
+	var msg string
 	for {
-		nbytes, err := ws.Read(buf)
+		err := websocket.Message.Receive(ws, &msg)
 		if err != nil {
 			fmt.Println("Error reading from websocket. Disconnecting.")
 			return // stop talking to this websocket
 		}
-		if nbytes == 0 {
-			fmt.Println("Bad message from websocket. Continuing.")
-			continue // bad message
-		}
-		err = handle(ws, UUID, buf[:nbytes])
+		err = handle(ws, UUID, msg)
 		if err != nil {
 			fmt.Println("Error writing to websocket. Disconnecting.")
 			return // stop talking to this websocket
@@ -95,7 +91,7 @@ func talk(ws *websocket.Conn, UUID uuid.UUID) {
 	}
 }
 
-func handle(ws *websocket.Conn, UUID uuid.UUID, msg []byte) error {
+func handle(ws *websocket.Conn, UUID uuid.UUID, msg string) error {
 	var err error
 	code := protocol.Code(msg[0])
 	switch code {
@@ -130,9 +126,9 @@ func sendEverything(ws *websocket.Conn) error {
 	return websocket.Message.Send(ws, string(marshalledBytes))
 }
 
-func sendTile(ws *websocket.Conn, msg []byte) error {
+func sendTile(ws *websocket.Conn, msg string) error {
 	pos := struct{X uint; Y uint}{}
-	err := json.Unmarshal(msg[1:], pos)
+	err := json.Unmarshal([]byte(msg[1:]), pos)
 	if err != nil {
 		fmt.Println("Bad GetTile message.")
 		return nil
