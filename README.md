@@ -10,7 +10,7 @@ The source code of this repository compiles to three executable programs:
 
 The source for __woobloo-orchestration__ can be found in [src/c](src/c). __woobloo-orchestration__ is written entirely in C and serves one purpose: it hooks together __woobloo-frontman__ and __woobloo-game__. To be more blunt, __woobloo-orchestration__ simply pipes the stdout of __woobloo-frontman__ to the stdin of __woobloo-game__, and vice versa. This is shown in the diagram below.
 
-[!docs/images/woobloo-orchestration.png](docs/images/woobloo-orchestration.png)
+![docs/images/woobloo-orchestration.png](docs/images/woobloo-orchestration.png)
 
 ## Woobloo Frontman
 
