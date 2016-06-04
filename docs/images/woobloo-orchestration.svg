@@ -15,7 +15,10 @@
    id="svg3352"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="woobloo-orchestration.svg">
+   sodipodi:docname="woobloo-orchestration.svg"
+   inkscape:export-filename="/home/tom/go/src/github.com/woobloo/woobloo-game/docs/images/woobloo-orchestration.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
   <defs
      id="defs3354" />
   <sodipodi:namedview
@@ -26,7 +29,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.86831672"
-     inkscape:cx="419.11613"
+     inkscape:cx="229.0933"
      inkscape:cy="432.80853"
      inkscape:current-layer="layer1"
      id="namedview3356"
@@ -44,7 +47,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
