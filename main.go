@@ -76,6 +76,7 @@ func accepter(ws *websocket.Conn) {
 }
 
 func talk(ws *websocket.Conn, UUID uuid.UUID) {
+	// BROKEN
 	var msg string
 	for {
 		err := websocket.Message.Receive(ws, &msg)
